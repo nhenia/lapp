@@ -25,6 +25,7 @@ Designed for phones and desktops, and it honors `prefers-reduced-motion`.
 | `index.html` | Markup + the fleur-de-lis ornament and Google Fonts link |
 | `styles.css` | All styling and animation (parchment ground, dark cards, smoke, flip) |
 | `script.js` | The 22 cards' text, the draw choreography, and the editable settings |
+| `contact_info.md` | Plain-text contact details shown at the end of the reading — **edit this, no code** |
 | `.github/workflows/deploy.yml` | Auto-deploys to GitHub Pages on push to `main` |
 | `.nojekyll` | Tells Pages to serve the files as-is |
 | `actualtext` | The full source guidebook the card text was drawn from |
@@ -34,14 +35,26 @@ Designed for phones and desktops, and it honors `prefers-reduced-motion`.
 
 ## Customizing
 
-All the knobs live at the top of **`script.js`**:
+A few knobs live at the top of **`script.js`**:
 
 ```js
-const INSTAGRAM = "_nh_en";       // contact handle shown at the end
 const IMAGE_BASE = "cards/";      // folder the card art lives in
 const IMAGE_EXT  = ".jpg";        // card art file extension
 const REVERSAL_CHANCE = 0.32;     // odds a card lands reversed (0 = never)
 ```
+
+### Contact details
+
+Edit **`contact_info.md`** — no code required. It's plain text, one item per line:
+
+```
+Lead: cards & words by
+Instagram: _nh_en
+Email:
+Website:
+```
+
+Fill in any of **Instagram, TikTok, Twitter/X, GitHub, Email,** or **Website** (the `@` is optional; a blank value is hidden). The first filled item is shown large, any others appear smaller beneath it, and `Lead` is the little line above. The site reads this file fresh each time it loads.
 
 ### Adding the card art
 

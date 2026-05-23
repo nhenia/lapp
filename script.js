@@ -2,12 +2,17 @@
    The Lagniappe Arcana — single-card reading
    ===================================================================
    EDIT ME:
-   - INSTAGRAM: your handle (no @). Drives the link + display at the end.
+   - Contact details: edit  contact_info.md  (no code needed). The site
+     reads that file on load and shows whatever you put there.
    - IMAGE_BASE / card.slug: drop art into  cards/<slug>.jpg  and it shows
      automatically. Until then a styled placeholder face is used.
 =================================================================== */
 
-const INSTAGRAM = "_nh_en";              // <-- Jen's Instagram handle
+// Only used if contact_info.md can't be loaded.
+const CONTACT_FALLBACK = {
+  lead: "cards & words by",
+  links: [{ type: "instagram", value: "_nh_en" }],
+};
 const IMAGE_BASE = "cards/";              // folder holding the card art
 const IMAGE_EXT = ".jpg";                 // extension of the card art
 const REVERSAL_CHANCE = 0.32;             // odds a card lands reversed
@@ -195,7 +200,8 @@ const mInquiry = document.getElementById("meaningInquiry");
 const mTell = document.getElementById("meaningTell");
 const meaning = document.getElementById("meaning");
 const contact = document.getElementById("contact");
-const contactHandle = document.getElementById("contactHandle");
+const contactLead = document.getElementById("contactLead");
+const contactLinks = document.getElementById("contactLinks");
 const againBtn = document.getElementById("again");
 
 let busy = false;
@@ -204,9 +210,65 @@ let busy = false;
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const T = (full, lite) => (reduce ? lite : full);
 
-/* contact */
-contactHandle.textContent = "@" + INSTAGRAM;
-contactHandle.href = "https://instagram.com/" + INSTAGRAM;
+/* contact — populated from contact_info.md, with a safe fallback */
+function buildContactLink(type, value) {
+  const strip = (v) => v.replace(/^@/, "");
+  const t = type.toLowerCase();
+  if (t === "instagram") { const h = strip(value); return { href: "https://instagram.com/" + h, label: "@" + h }; }
+  if (t === "tiktok") { const h = strip(value); return { href: "https://www.tiktok.com/@" + h, label: "@" + h }; }
+  if (t === "twitter" || t === "x") { const h = strip(value); return { href: "https://x.com/" + h, label: "@" + h }; }
+  if (t === "github") { const h = strip(value); return { href: "https://github.com/" + h, label: h }; }
+  if (t === "email") { return { href: "mailto:" + value, label: value }; }
+  const url = /^https?:\/\//i.test(value) ? value : "https://" + value;
+  const label = value.replace(/^https?:\/\//i, "").replace(/\/+$/, "");
+  return { href: url, label };
+}
+
+function parseContactInfo(text) {
+  let lead = "";
+  const links = [];
+  text.split(/\r?\n/).forEach((line) => {
+    const t = line.trim();
+    if (!t || t.startsWith("#")) return;
+    const i = t.indexOf(":");
+    if (i < 0) return;
+    const key = t.slice(0, i).trim().toLowerCase();
+    const val = t.slice(i + 1).trim();
+    if (!val) return;
+    if (key === "lead") { lead = val; return; }
+    links.push({ type: key, value: val });
+  });
+  return { lead, links };
+}
+
+function renderContact(cfg) {
+  contactLead.textContent = cfg.lead || "";
+  contactLead.hidden = !cfg.lead;
+  contactLinks.innerHTML = "";
+  cfg.links.forEach((l, idx) => {
+    const { href, label } = buildContactLink(l.type, l.value);
+    const a = document.createElement("a");
+    a.className = idx === 0 ? "contact__handle" : "contact__link";
+    a.href = href;
+    a.textContent = label;
+    if (!href.startsWith("mailto:")) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+    contactLinks.appendChild(a);
+  });
+}
+
+async function loadContact() {
+  try {
+    const res = await fetch("contact_info.md", { cache: "no-store" });
+    if (!res.ok) return;
+    const cfg = parseContactInfo(await res.text());
+    if (cfg.lead || cfg.links.length) renderContact(cfg);
+  } catch (e) {
+    /* keep the fallback already on screen */
+  }
+}
+
+renderContact(CONTACT_FALLBACK);
+loadContact();
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];

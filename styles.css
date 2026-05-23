@@ -459,6 +459,12 @@ body.summoning .reading { opacity: 1; visibility: visible; }
   color: var(--ink-faint);
   margin: 0 0 0.3rem;
 }
+.contact__links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+}
 .contact__handle {
   display: inline-block;
   font-family: var(--display);
@@ -467,6 +473,20 @@ body.summoning .reading { opacity: 1; visibility: visible; }
   color: var(--ink);
   text-decoration: none;
   transition: color 0.4s ease, text-shadow 0.4s ease, letter-spacing 0.4s ease;
+}
+.contact__link {
+  font-family: var(--body);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+.contact__link:hover,
+.contact__link:focus-visible {
+  color: var(--gold);
+  text-shadow: 0 0 12px rgba(184, 137, 59, 0.35);
+  outline: none;
 }
 .contact__handle:hover,
 .contact__handle:focus-visible {
