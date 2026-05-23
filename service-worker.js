@@ -1,6 +1,6 @@
 /* The Lagniappe Arcana — service worker.
    Bump CACHE when you change cached files to force an update. */
-const CACHE = "lagniappe-v2";
+const CACHE = "lagniappe-v3";
 
 // App shell, cached on install. Relative paths resolve against the SW scope,
 // so this works on a custom domain or a project subpath alike.
@@ -9,10 +9,10 @@ const SHELL = [
   "index.html",
   "styles.css",
   "script.js",
-  "docs/settings.md",
-  "docs/appearance.md",
-  "docs/words.md",
-  "docs/cards.md",
+  "control_panel/settings.md",
+  "control_panel/appearance.md",
+  "control_panel/words.md",
+  "control_panel/cards.md",
   "manifest.webmanifest",
   "icon.svg",
   "icons/icon-192.png",
@@ -43,7 +43,7 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(req.url);
   const isNav = req.mode === "navigate";
-  const isConfig = url.pathname.includes("/docs/") && url.pathname.endsWith(".md");
+  const isConfig = url.pathname.includes("/control_panel/") && url.pathname.endsWith(".md");
 
   // Navigations + the editable docs files: fresh first, fall back to cache offline.
   if (isNav || isConfig) {

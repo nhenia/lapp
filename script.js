@@ -3,12 +3,12 @@
    ===================================================================
    EDIT ME — no code:
    - All settings (contact info, reversed frequency, card-image folder/type)
-     live in  docs/settings.md . The site reads that file when it loads.
+     live in  control_panel/settings.md . The site reads that file when it loads.
    - Card art: drop images into  cards/<slug>.jpg  (slugs below). Until then
      a styled placeholder face is shown.
 =================================================================== */
 
-// Defaults — overridden at load by docs/settings.md (see loadSettings).
+// Defaults — overridden at load by control_panel/settings.md (see loadSettings).
 let IMAGE_BASE = "cards/";
 let IMAGE_EXT = ".jpg";
 let REVERSAL_CHANCE = 0.32;
@@ -181,7 +181,7 @@ let OMENS = [
   "Breathe in the haze. The arcana is listening.",
 ];
 
-// Upright/Reversed labels — overridden by docs/words.md.
+// Upright/Reversed labels — overridden by control_panel/words.md.
 const LABELS = { upright: "Upright", reversed: "Reversed" };
 
 /* ---- elements ---- */
@@ -215,7 +215,7 @@ let busy = false;
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const T = (full, lite) => (reduce ? lite : full);
 
-/* settings — contact + options from docs/settings.md, with safe fallbacks */
+/* settings — contact + options from control_panel/settings.md, with safe fallbacks */
 const CONTACT_TYPES = ["instagram", "tiktok", "twitter", "x", "github", "email", "website", "url", "site"];
 
 function buildContactLink(type, value) {
@@ -289,7 +289,7 @@ function renderContact(cfg) {
 
 async function loadSettings() {
   try {
-    const res = await fetch("docs/settings.md", { cache: "no-store" });
+    const res = await fetch("control_panel/settings.md", { cache: "no-store" });
     if (!res.ok) return;
     const cfg = parseSettings(await res.text());
     applyOptions(cfg.options);
@@ -299,7 +299,7 @@ async function loadSettings() {
   }
 }
 
-/* appearance — colors + fonts from docs/appearance.md */
+/* appearance — colors + fonts from control_panel/appearance.md */
 function setVar(name, val) { document.documentElement.style.setProperty(name, val); }
 function hexShade(hex, amt) { // amt -1..1 (negative = darker); returns null if not hex
   const m = String(hex).trim().match(/^#?([0-9a-fA-F]{6})$/);
@@ -328,7 +328,7 @@ function applyFont(role, family) {
 }
 async function loadAppearance() {
   try {
-    const res = await fetch("docs/appearance.md", { cache: "no-store" });
+    const res = await fetch("control_panel/appearance.md", { cache: "no-store" });
     if (!res.ok) return;
     (await res.text()).split(/\r?\n/).forEach((line) => {
       const t = line.trim();
@@ -346,10 +346,10 @@ async function loadAppearance() {
   } catch (e) { /* keep defaults */ }
 }
 
-/* words — on-screen copy + omens from docs/words.md */
+/* words — on-screen copy + omens from control_panel/words.md */
 async function loadWords() {
   try {
-    const res = await fetch("docs/words.md", { cache: "no-store" });
+    const res = await fetch("control_panel/words.md", { cache: "no-store" });
     if (!res.ok) return;
     const omens = [];
     (await res.text()).split(/\r?\n/).forEach((line) => {
@@ -370,7 +370,7 @@ async function loadWords() {
   } catch (e) { /* keep defaults */ }
 }
 
-/* cards — titles, images, and text from docs/cards.md (overrides defaults) */
+/* cards — titles, images, and text from control_panel/cards.md (overrides defaults) */
 function applyCards(text) {
   text.split(/^\s*===/m).forEach((block) => {
     const lines = block.split(/\r?\n/);
@@ -400,7 +400,7 @@ function applyCards(text) {
 }
 async function loadCards() {
   try {
-    const res = await fetch("docs/cards.md", { cache: "no-store" });
+    const res = await fetch("control_panel/cards.md", { cache: "no-store" });
     if (!res.ok) return;
     applyCards(await res.text());
   } catch (e) { /* keep built-in card text */ }
@@ -460,7 +460,7 @@ function dressCard(c, reversed) {
   cardOrientation.textContent = reversed ? LABELS.reversed : LABELS.upright;
 
   // try the art; reveal it only if it actually loads.
-  // c.img (from docs/cards.md) wins; otherwise use the automatic path.
+  // c.img (from control_panel/cards.md) wins; otherwise use the automatic path.
   const explicit = c.img && c.img.trim();
   const src = explicit
     ? (/(^https?:\/\/)|\//i.test(explicit) ? explicit : IMAGE_BASE + explicit)
