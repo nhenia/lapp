@@ -12,6 +12,15 @@ Hi Jen — this is your space. It's a guided tour of everything on the site, in 
 
 There's a list of all 22 cards near the bottom, in case you want to point at a specific one.
 
+**A lot of this you can also just change yourself** — no waiting, no code. The other files in this folder are plain typing, exactly like this page:
+
+- **`settings.md`** — your contact info, how often cards come up reversed, where the card images live.
+- **`appearance.md`** — the colors and the fonts.
+- **`words.md`** — the words on screen: the BEGIN button, the title, the omen lines, the button labels.
+- **`cards.md`** — every card's title, picture, and all of its writing.
+
+If an edit ever looks wrong, the site quietly falls back to the original — so you genuinely can't break it. Anything you'd rather not touch, just describe below and it'll get done for you.
+
 ---
 
 ## 1. The very first thing people see

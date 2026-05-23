@@ -1,0 +1,29 @@
+# The words shown on screen (not on the cards themselves). Edit and save.
+# Blank = keep the default.
+
+# The lone word people click to start the reading.
+Start button: BEGIN
+
+# The small title shown above the card.
+Title: The Lagniappe Arcana
+
+# The button to pull a new card.
+Draw-again button: draw another
+
+# The little label before the closing sensory line.
+Tell label: the tell
+
+# What the card says when it lands right-side up / upside-down.
+Upright label: Upright
+Reversed label: Reversed
+
+
+## OMENS
+# The line that appears while the cards rise from the smoke. One per line,
+# each starting with a dash. A random one is chosen for each reading.
+
+- The smoke gathers. The deck already knows why you came.
+- Shuffle the air. One card has been waiting for you.
+- Hold the question in your chest. Let the cards find it.
+- The crossroads opens. Something rises to meet you.
+- Breathe in the haze. The arcana is listening.

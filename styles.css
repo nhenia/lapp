@@ -435,7 +435,7 @@ body.summoning .reading { opacity: 1; visibility: visible; }
   margin: 0;
 }
 .meaning__tell::before {
-  content: "the tell — ";
+  content: var(--tell-label, "the tell") " — ";
   font-family: var(--display-sc);
   letter-spacing: 0.18em;
   font-size: 0.7rem;

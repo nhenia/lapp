@@ -32,3 +32,18 @@ Both notes at the top of this file describe the same site — the same deck, the
 - **It said where it lives.** "github deployable… for mobile AND desktop" set the whole technical shape in half a line.
 
 None of this is one draft being right and the other wrong — the second is really just the first one given a little more room to breathe. Start wherever you start; this page came out of both.
+
+---
+
+## Ideas you could ask for later
+
+Natural next steps, if you ever want them — each is a one-line request away:
+
+- **Real card art** — the single biggest upgrade; the placeholders are just standing in.
+- **A three-card spread** (past / present / future) with a staggered flip.
+- **Sound** — a soft ambient bed, a paper *whoosh* on the flip, a hush before the reveal.
+- **An opening question** — let the visitor type what's on their mind before BEGIN, and echo it above the card.
+- **Card of the day** — the same card all day for a given date.
+- **Save / share the reading** as an image, or a link straight to one card.
+- **A full deck browser** — a gallery to read every card outside a reading.
+- **A custom domain** (it's already an installable, offline-ready app).

@@ -1,21 +1,21 @@
 /* ===================================================================
    The Lagniappe Arcana — single-card reading
    ===================================================================
-   EDIT ME:
-   - Contact details: edit  contact_info.md  (no code needed). The site
-     reads that file on load and shows whatever you put there.
-   - IMAGE_BASE / card.slug: drop art into  cards/<slug>.jpg  and it shows
-     automatically. Until then a styled placeholder face is used.
+   EDIT ME — no code:
+   - All settings (contact info, reversed frequency, card-image folder/type)
+     live in  control_panel/settings.md . The site reads that file when it loads.
+   - Card art: drop images into  cards/<slug>.jpg  (slugs below). Until then
+     a styled placeholder face is shown.
 =================================================================== */
 
-// Only used if contact_info.md can't be loaded.
-const CONTACT_FALLBACK = {
+// Defaults — overridden at load by control_panel/settings.md (see loadSettings).
+let IMAGE_BASE = "cards/";
+let IMAGE_EXT = ".jpg";
+let REVERSAL_CHANCE = 0.32;
+const SETTINGS_FALLBACK = {
   lead: "cards & words by",
   links: [{ type: "instagram", value: "_nh_en" }],
 };
-const IMAGE_BASE = "cards/";              // folder holding the card art
-const IMAGE_EXT = ".jpg";                 // extension of the card art
-const REVERSAL_CHANCE = 0.32;             // odds a card lands reversed
 
 const CARDS = [
   { n: "0", slug: "the-reveler", name: "The Reveler", trad: "The Fool",
@@ -173,7 +173,7 @@ const CARDS = [
     tell: "The heavy, intricate rustle of thousands of hand-sewn beads and feathers; a profound, exhausted silence following a spectacular display." },
 ];
 
-const OMENS = [
+let OMENS = [
   "The smoke gathers. The deck already knows why you came.",
   "Shuffle the air. One card has been waiting for you.",
   "Hold the question in your chest. Let the cards find it.",
@@ -181,9 +181,14 @@ const OMENS = [
   "Breathe in the haze. The arcana is listening.",
 ];
 
+// Upright/Reversed labels — overridden by control_panel/words.md.
+const LABELS = { upright: "Upright", reversed: "Reversed" };
+
 /* ---- elements ---- */
 const body = document.body;
 const beginBtn = document.getElementById("begin");
+const beginWord = document.querySelector(".begin__word");
+const kicker = document.getElementById("kicker");
 const smoke = document.getElementById("smoke");
 const deck = document.getElementById("deck");
 const card = document.getElementById("card");
@@ -210,7 +215,9 @@ let busy = false;
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const T = (full, lite) => (reduce ? lite : full);
 
-/* contact — populated from contact_info.md, with a safe fallback */
+/* settings — contact + options from control_panel/settings.md, with safe fallbacks */
+const CONTACT_TYPES = ["instagram", "tiktok", "twitter", "x", "github", "email", "website", "url", "site"];
+
 function buildContactLink(type, value) {
   const strip = (v) => v.replace(/^@/, "");
   const t = type.toLowerCase();
@@ -224,9 +231,10 @@ function buildContactLink(type, value) {
   return { href: url, label };
 }
 
-function parseContactInfo(text) {
+function parseSettings(text) {
   let lead = "";
   const links = [];
+  const options = {};
   text.split(/\r?\n/).forEach((line) => {
     const t = line.trim();
     if (!t || t.startsWith("#")) return;
@@ -236,9 +244,32 @@ function parseContactInfo(text) {
     const val = t.slice(i + 1).trim();
     if (!val) return;
     if (key === "lead") { lead = val; return; }
-    links.push({ type: key, value: val });
+    if (key === "reversed chance") { options.reversed = val; return; }
+    if (key === "card image folder") { options.imageBase = val; return; }
+    if (key === "card image type") { options.imageExt = val; return; }
+    if (CONTACT_TYPES.includes(key)) links.push({ type: key, value: val });
   });
-  return { lead, links };
+  return { lead, links, options };
+}
+
+function parseReversedChance(raw) {
+  const s = String(raw).trim().toLowerCase();
+  if (s === "never") return 0;
+  let m;
+  if ((m = s.match(/^1\s*in\s*(\d+(?:\.\d+)?)$/))) { const n = parseFloat(m[1]); return n > 0 ? 1 / n : 0; }
+  if ((m = s.match(/^(\d+(?:\.\d+)?)\s*%$/))) return Math.min(1, parseFloat(m[1]) / 100);
+  const n = parseFloat(s);
+  if (!isNaN(n)) return Math.max(0, Math.min(1, n > 1 ? n / 100 : n));
+  return null; // unrecognized — keep the current value
+}
+
+function applyOptions(opt) {
+  if (opt.reversed != null) {
+    const v = parseReversedChance(opt.reversed);
+    if (v != null) REVERSAL_CHANCE = v;
+  }
+  if (opt.imageBase) IMAGE_BASE = /\/$/.test(opt.imageBase) ? opt.imageBase : opt.imageBase + "/";
+  if (opt.imageExt) IMAGE_EXT = opt.imageExt.startsWith(".") ? opt.imageExt : "." + opt.imageExt;
 }
 
 function renderContact(cfg) {
@@ -256,19 +287,130 @@ function renderContact(cfg) {
   });
 }
 
-async function loadContact() {
+async function loadSettings() {
   try {
-    const res = await fetch("contact_info.md", { cache: "no-store" });
+    const res = await fetch("control_panel/settings.md", { cache: "no-store" });
     if (!res.ok) return;
-    const cfg = parseContactInfo(await res.text());
+    const cfg = parseSettings(await res.text());
+    applyOptions(cfg.options);
     if (cfg.lead || cfg.links.length) renderContact(cfg);
   } catch (e) {
-    /* keep the fallback already on screen */
+    /* keep the fallbacks already in effect */
   }
 }
 
-renderContact(CONTACT_FALLBACK);
-loadContact();
+/* appearance — colors + fonts from control_panel/appearance.md */
+function setVar(name, val) { document.documentElement.style.setProperty(name, val); }
+function hexShade(hex, amt) { // amt -1..1 (negative = darker); returns null if not hex
+  const m = String(hex).trim().match(/^#?([0-9a-fA-F]{6})$/);
+  if (!m) return null;
+  const f = (c) => Math.max(0, Math.min(255, amt >= 0 ? Math.round(c + (255 - c) * amt) : Math.round(c * (1 + amt))));
+  const n = parseInt(m[1], 16);
+  return "#" + [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => f(c).toString(16).padStart(2, "0")).join("");
+}
+function applyColor(role, v) {
+  if (role === "background") { setVar("--bg-0", v); setVar("--bg-1", hexShade(v, -0.08) || v); setVar("--bg-2", hexShade(v, -0.18) || v); }
+  else if (role === "text") { setVar("--ink", v); setVar("--ink-soft", hexShade(v, 0.28) || v); setVar("--ink-faint", hexShade(v, 0.45) || v); }
+  else if (role === "accent") { setVar("--gold", v); setVar("--gold-bright", hexShade(v, 0.18) || v); }
+  else if (role === "card") { setVar("--card-0", v); setVar("--card-1", hexShade(v, 0.16) || v); setVar("--card-2", hexShade(v, -0.4) || v); }
+}
+function applyFont(role, family) {
+  const fam = family.trim();
+  if (!fam) return;
+  const id = "dynfont-" + role;
+  const href = "https://fonts.googleapis.com/css2?family=" +
+    encodeURIComponent(fam).replace(/%20/g, "+") + ":ital,wght@0,400;0,700;1,400&display=swap";
+  let link = document.getElementById(id);
+  if (!link) { link = document.createElement("link"); link.rel = "stylesheet"; link.id = id; document.head.appendChild(link); }
+  link.href = href;
+  if (role === "display") { setVar("--display", "'" + fam + "', Georgia, serif"); setVar("--display-sc", "'" + fam + "', serif"); }
+  else { setVar("--body", "'" + fam + "', system-ui, sans-serif"); }
+}
+async function loadAppearance() {
+  try {
+    const res = await fetch("control_panel/appearance.md", { cache: "no-store" });
+    if (!res.ok) return;
+    (await res.text()).split(/\r?\n/).forEach((line) => {
+      const t = line.trim();
+      if (!t || t.startsWith("#")) return;
+      const i = t.indexOf(":"); if (i < 0) return;
+      const key = t.slice(0, i).trim().toLowerCase();
+      const val = t.slice(i + 1).trim(); if (!val) return;
+      if (key === "background") applyColor("background", val);
+      else if (key === "text" || key === "text color") applyColor("text", val);
+      else if (key === "accent" || key === "gold") applyColor("accent", val);
+      else if (key === "card" || key === "card color") applyColor("card", val);
+      else if (key === "display font") applyFont("display", val);
+      else if (key === "body font") applyFont("body", val);
+    });
+  } catch (e) { /* keep defaults */ }
+}
+
+/* words — on-screen copy + omens from control_panel/words.md */
+async function loadWords() {
+  try {
+    const res = await fetch("control_panel/words.md", { cache: "no-store" });
+    if (!res.ok) return;
+    const omens = [];
+    (await res.text()).split(/\r?\n/).forEach((line) => {
+      const t = line.trim();
+      if (!t || t.startsWith("#")) return;
+      if (t.startsWith("-")) { const v = t.slice(1).trim(); if (v) omens.push(v); return; }
+      const i = t.indexOf(":"); if (i < 0) return;
+      const key = t.slice(0, i).trim().toLowerCase();
+      const val = t.slice(i + 1).trim(); if (!val) return;
+      if (key === "start button" && beginWord) beginWord.textContent = val;
+      else if (key === "title" && kicker) kicker.textContent = val;
+      else if (key === "draw-again button" && againBtn) againBtn.textContent = val;
+      else if (key === "tell label") setVar("--tell-label", '"' + val + '"');
+      else if (key === "upright label") LABELS.upright = val;
+      else if (key === "reversed label") LABELS.reversed = val;
+    });
+    if (omens.length) OMENS = omens;
+  } catch (e) { /* keep defaults */ }
+}
+
+/* cards — titles, images, and text from control_panel/cards.md (overrides defaults) */
+function applyCards(text) {
+  text.split(/^\s*===/m).forEach((block) => {
+    const lines = block.split(/\r?\n/);
+    const header = (lines.shift() || "").replace(/=+\s*$/, "").trim();
+    if (!header) return;
+    const dot = header.indexOf("·");
+    const num = (dot >= 0 ? header.slice(0, dot) : header).trim();
+    const name = dot >= 0 ? header.slice(dot + 1).trim() : "";
+    const card = CARDS.find((c) => c.n === num);
+    if (!card) return;
+    if (name) card.name = name;
+    lines.forEach((line) => {
+      const t = line.trim();
+      if (!t || t.startsWith("#")) return;
+      const i = t.indexOf(":"); if (i < 0) return;
+      const key = t.slice(0, i).trim().toLowerCase();
+      const val = t.slice(i + 1).trim(); if (!val) return;
+      if (key === "traditional name") card.trad = val;
+      else if (key === "image") card.img = val;
+      else if (key === "keywords") card.keywords = val;
+      else if (key === "upright") card.upright = val;
+      else if (key === "reversed") card.reversed = val;
+      else if (key === "question" || key === "inquiry") card.inquiry = val;
+      else if (key === "tell") card.tell = val;
+    });
+  });
+}
+async function loadCards() {
+  try {
+    const res = await fetch("control_panel/cards.md", { cache: "no-store" });
+    if (!res.ok) return;
+    applyCards(await res.text());
+  } catch (e) { /* keep built-in card text */ }
+}
+
+renderContact(SETTINGS_FALLBACK);
+loadSettings();
+loadAppearance();
+loadWords();
+loadCards();
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -315,14 +457,19 @@ function dressCard(c, reversed) {
   cardNumeral.textContent = c.n;
   cardName.textContent = c.name;
   cardTrad.textContent = c.trad;
-  cardOrientation.textContent = reversed ? "Reversed" : "Upright";
+  cardOrientation.textContent = reversed ? LABELS.reversed : LABELS.upright;
 
-  // try the art; reveal it only if it actually loads
+  // try the art; reveal it only if it actually loads.
+  // c.img (from control_panel/cards.md) wins; otherwise use the automatic path.
+  const explicit = c.img && c.img.trim();
+  const src = explicit
+    ? (/(^https?:\/\/)|\//i.test(explicit) ? explicit : IMAGE_BASE + explicit)
+    : IMAGE_BASE + c.slug + IMAGE_EXT;
   cardImg.classList.remove("is-loaded");
   cardImg.alt = c.name + " — " + c.trad;
   cardImg.onload = () => cardImg.classList.add("is-loaded");
   cardImg.onerror = () => cardImg.classList.remove("is-loaded");
-  cardImg.src = IMAGE_BASE + c.slug + IMAGE_EXT;
+  cardImg.src = src;
 
   card.classList.toggle("card--reversed", reversed);
 
