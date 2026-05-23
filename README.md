@@ -114,19 +114,6 @@ python3 -m http.server 8000
 
 ---
 
-## Writing good prompts (if you want Claude to change things)
-
-This whole site was built from a written brief. A few habits make those requests land on the first try:
-
-- **Name the file or element.** "In `script.js`, change the reversal chance to 1 in 5" beats "make reversals rarer."
-- **Describe the *feeling*, then the mechanics.** "It should feel like the card chose you — slower flip, a beat of silence before the meaning" gives direction a bullet list can't.
-- **Hand over assets and links.** Paste the image URLs, a reference site, a screenshot, a hex color. Specifics in, specifics out.
-- **Say where it runs.** "Must look right on a phone in portrait" changes the answer.
-- **One change at a time for tricky things.** Big redesigns are fine; subtle animation tuning is easier to nail in small passes.
-- **Ask to see it.** "Run it and screenshot the reading" catches what a description can't.
-
----
-
 ## Ideas for later
 
 Things that would be natural next steps:
