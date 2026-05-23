@@ -7,7 +7,7 @@
      automatically. Until then a styled placeholder face is used.
 =================================================================== */
 
-const INSTAGRAM = "hereliesaz";          // <-- your Instagram handle
+const INSTAGRAM = "_nh_en";              // <-- Jen's Instagram handle
 const IMAGE_BASE = "cards/";              // folder holding the card art
 const IMAGE_EXT = ".jpg";                 // extension of the card art
 const REVERSAL_CHANCE = 0.32;             // odds a card lands reversed
