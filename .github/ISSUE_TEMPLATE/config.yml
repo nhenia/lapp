@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: How to customize the deck
+    url: https://github.com/nhenia/lapp#customizing
+    about: Editing cards, words, contact details, colors, and fonts — no code required.

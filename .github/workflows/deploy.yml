@@ -27,6 +27,11 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
+        with:
+          # Enable the Pages site automatically via the workflow token so no one
+          # has to flip Settings → Pages → Source by hand. Takes effect once the
+          # token has the rights to do so.
+          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
