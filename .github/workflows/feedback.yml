@@ -1,0 +1,88 @@
+name: Handle control-panel feedback
+
+# When control_panel/feedback.md is edited, read the notes written on the
+# "Your note:" lines and turn them into a draft pull request.
+#
+# This runs Claude Code (the same agent you use locally) in CI, signed in
+# with your Claude subscription — no separate pay-as-you-go API billing.
+#
+# SETUP (one time):
+#   1. In a terminal with Claude Code installed, run:  claude setup-token
+#      (needs a Claude Pro/Max plan). Copy the token it prints.
+#      — or run  /install-github-app  in Claude Code to set this up for you.
+#   2. In the repo: Settings → Secrets and variables → Actions →
+#      New repository secret. Name it  CLAUDE_CODE_OAUTH_TOKEN  and paste it.
+# Without that secret, this workflow just lists the notes in the run
+# summary and stops — it can't apply them automatically.
+
+on:
+  push:
+    paths:
+      - "control_panel/feedback.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: feedback-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  feedback:
+    # Don't loop on the automation's own clearing commit.
+    if: ${{ !contains(github.event.head_commit.message, '[skip-feedback]') }}
+    runs-on: ubuntu-latest
+    env:
+      HAS_KEY: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: scan
+        name: Look for written notes
+        run: node .github/scripts/scan-feedback.js
+
+      - name: Token missing
+        if: ${{ steps.scan.outputs.has_notes == 'true' && env.HAS_KEY != 'true' }}
+        run: echo "::warning::Notes were found, but no CLAUDE_CODE_OAUTH_TOKEN secret is set, so they can't be applied automatically. Create one with 'claude setup-token' and add it under Settings → Secrets and variables → Actions."
+
+      - name: Apply the notes with Claude
+        if: ${{ steps.scan.outputs.has_notes == 'true' && env.HAS_KEY == 'true' }}
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: "--max-turns 40"
+          # If you're pinned to the older beta action, rename "prompt" to "direct_prompt".
+          prompt: |
+            The site owner left change requests in control_panel/feedback.md, on the
+            "Your note:" lines and under "Anything else". Text in italics inside
+            parentheses is a placeholder hint — ignore it.
+
+            For each real note:
+            - Make the change. Prefer editing the files in control_panel/
+              (settings.md, appearance.md, words.md, cards.md), since the site reads
+              those at runtime. Only touch the code (index.html, styles.css,
+              script.js) if a note truly requires it.
+            - Match the existing gentle, plain-language style in anything you edit.
+
+            REQUIRED — rewrite the feedback document as part of this same update:
+            - Reset every "Your note:" line in control_panel/feedback.md back to a
+              blank "> Your note:" and clear the "Anything else" answer area, so the
+              next round starts fresh. Keep all the explanatory text, hints, and
+              headings exactly as they were.
+
+            Then:
+            - Commit everything (your edits plus the cleared feedback.md) and push
+              directly to the current branch. End the commit message with the line:
+              [skip-feedback]
+            - Write the commit message so it lists what you changed for each note.
+            - If a note is unclear or can't be done safely, leave that note in place
+              (don't blank it) and say what you skipped in the commit message.
+
+      - name: Publish the updated site
+        # A push made with GITHUB_TOKEN doesn't auto-trigger deploy.yml, so kick it.
+        if: ${{ steps.scan.outputs.has_notes == 'true' && env.HAS_KEY == 'true' && github.ref_name == 'main' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main
