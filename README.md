@@ -28,6 +28,9 @@ Designed for phones and desktops, and it honors `prefers-reduced-motion`.
 | `contact_info.md` | Plain-text contact details shown at the end of the reading — **edit this, no code** |
 | `.github/workflows/deploy.yml` | Auto-deploys to GitHub Pages on push to `main` |
 | `.nojekyll` | Tells Pages to serve the files as-is |
+| `manifest.webmanifest` | PWA metadata (name, colors, icons) so it can be installed |
+| `service-worker.js` | Caches the site for offline use |
+| `icon.svg` + `icons/` | App icons (scalable + PNG, including maskable + Apple) |
 | `actualtext` | The full source guidebook the card text was drawn from |
 | `first_prompt.md` | The original brief that kicked this off |
 
@@ -112,6 +115,14 @@ python3 -m http.server 8000
 # then open http://localhost:8000
 ```
 
+(Use a server like this — not opening the file directly — so the service worker and `contact_info.md` load.)
+
+## Install it (it's a PWA)
+
+The site is a Progressive Web App: once it's live over HTTPS, phones and desktops will offer to **install** / **Add to Home Screen**, and it runs **offline** after the first visit (the cards' text is bundled in).
+
+If you change the site and an update doesn't show, bump the `CACHE` name at the top of `service-worker.js` (e.g. `lagniappe-v1` → `lagniappe-v2`) so visitors pull the new files. Edits to `contact_info.md` and the page itself refresh on their own while online.
+
 ---
 
 ## Ideas for later
@@ -125,7 +136,7 @@ Things that would be natural next steps:
 - **Card of the day** — seed the draw by date so a visitor gets the same card all day.
 - **Save / share the reading** as an image, or a deep link like `?card=the-roux`.
 - **A full deck browser** — a gallery to read every card outside a reading.
-- **Custom domain + PWA** so it installs on a phone and works offline.
+- **A custom domain** (it's already an installable, offline-ready PWA).
 
 ---
 

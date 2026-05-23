@@ -6,6 +6,16 @@
 <title>The Lagniappe Arcana</title>
 <meta name="description" content="A single-card reading from the Lagniappe Arcana — a 22-card Major Arcana deck shaped by the rituals and histories of New Orleans." />
 
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="theme-color" content="#f3ead8" />
+<link rel="icon" href="icon.svg" type="image/svg+xml" />
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Lagniappe" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
@@ -90,5 +100,12 @@
   </svg>
 
   <script src="script.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("service-worker.js").catch(() => {});
+      });
+    }
+  </script>
 </body>
 </html>
