@@ -16,3 +16,6 @@ desktop.ini
 # Logs & temp
 *.log
 *.tmp
+
+# Claude Code personal/per-machine settings
+.claude/settings.local.json
