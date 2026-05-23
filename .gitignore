@@ -1,0 +1,21 @@
+# OS cruft
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Editor / IDE
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Logs & temp
+*.log
+*.tmp
+
+# Claude Code personal/per-machine settings
+.claude/settings.local.json
