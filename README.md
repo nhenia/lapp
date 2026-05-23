@@ -24,8 +24,11 @@ Designed for phones and desktops, and it honors `prefers-reduced-motion`.
 | --- | --- |
 | `index.html` | Markup + the fleur-de-lis ornament and Google Fonts link |
 | `styles.css` | All styling and animation (parchment ground, dark cards, smoke, flip) |
-| `script.js` | The 22 cards' text and the draw choreography |
-| `docs/settings.md` | Contact info + options (reversed frequency, card-image folder/type) — **edit this, no code** |
+| `script.js` | The draw choreography + built-in fallbacks for everything below |
+| `docs/settings.md` | Contact info + options (reversed frequency, card-image folder/type) — **edit, no code** |
+| `docs/appearance.md` | Colors and fonts — **edit, no code** |
+| `docs/words.md` | On-screen words: the BEGIN button, title, omens, button labels — **edit, no code** |
+| `docs/cards.md` | Every card's title, image, and text — **edit, no code** |
 | `docs/feedback.md` | A plain-language tour of the whole site for Jen to mark up with change requests |
 | `.github/workflows/deploy.yml` | Auto-deploys to GitHub Pages on push to `main` |
 | `.nojekyll` | Tells Pages to serve the files as-is |
@@ -39,9 +42,18 @@ Designed for phones and desktops, and it honors `prefers-reduced-motion`.
 
 ## Customizing
 
-### Settings (one file, no code)
+Everything adjustable lives in the **`docs/`** folder as plain text — no code, no terminal. The site reads these files fresh on each load, and falls back to built-in defaults if a file is missing or a value doesn't parse, so a bad edit can't break the page. The four editable files:
 
-Everything adjustable lives in **`docs/settings.md`** — plain text, `Key: value`, one per line. The site reads it fresh on each load.
+| File | Controls |
+| --- | --- |
+| `docs/settings.md` | Contact links, reversed frequency, card-image folder/type |
+| `docs/appearance.md` | Colors (`Background`, `Text`, `Accent`, `Card`) and fonts (any from fonts.google.com) |
+| `docs/words.md` | The BEGIN button, the title, the omen lines, and button/orientation labels |
+| `docs/cards.md` | Each card's title, image, keywords, upright/reversed text, question, and tell |
+
+### Settings (`docs/settings.md`)
+
+Plain text, `Key: value`, one per line:
 
 ```
 ## CONTACT
@@ -63,7 +75,7 @@ Card image type: .jpg
 
 ### Adding the card art
 
-Drop an image per card into a `cards/` folder, named by its **slug**. The art appears automatically; until then a styled placeholder face (numeral + name + fleur-de-lis) is shown, so the site looks finished even with no images.
+Two ways: either set an `Image:` line for a card in `docs/cards.md` (a file name in the cards folder, or a full `https://…` link), or just drop an image per card into a `cards/` folder named by its **slug** and it's picked up automatically. Until art exists, a styled placeholder face (numeral + name + fleur-de-lis) is shown, so the site looks finished even with no images.
 
 | # | Card | File to add |
 | --- | --- | --- |
@@ -92,13 +104,13 @@ Drop an image per card into a `cards/` folder, named by its **slug**. The art ap
 
 Portrait images at a 2:3 ratio look best (they're cropped to fill the card).
 
-### Fonts
+### Fonts & colors
 
-Set in `index.html` (the Google Fonts `<link>`) and `styles.css` (the `--display` / `--body` variables). Currently **Almendra** for headers, **Inter** for body.
+Set in `docs/appearance.md` — `Display font` / `Body font` (any family from fonts.google.com, loaded automatically) and the four colors. Currently **Almendra** headers, **Inter** body. (The values in `index.html`/`styles.css` are just the defaults used before the file loads.)
 
-### Card text
+### Card titles, images & text
 
-Each card is an object in the `CARDS` array in `script.js` (`name`, `trad`, `keywords`, `upright`, `reversed`, `inquiry`, `tell`). Edit there to tweak wording.
+Edit `docs/cards.md`. Each card is a block starting with a `=== <number> · <name> ===` header (the number matches the card — leave it; the name is the editable title), followed by `Traditional name`, `Image`, `Keywords`, `Upright`, `Reversed`, `Question`, and `Tell`. Blank lines keep the original. (`script.js` still holds the same text as a fallback.)
 
 ---
 

@@ -173,7 +173,7 @@ const CARDS = [
     tell: "The heavy, intricate rustle of thousands of hand-sewn beads and feathers; a profound, exhausted silence following a spectacular display." },
 ];
 
-const OMENS = [
+let OMENS = [
   "The smoke gathers. The deck already knows why you came.",
   "Shuffle the air. One card has been waiting for you.",
   "Hold the question in your chest. Let the cards find it.",
@@ -181,9 +181,14 @@ const OMENS = [
   "Breathe in the haze. The arcana is listening.",
 ];
 
+// Upright/Reversed labels — overridden by docs/words.md.
+const LABELS = { upright: "Upright", reversed: "Reversed" };
+
 /* ---- elements ---- */
 const body = document.body;
 const beginBtn = document.getElementById("begin");
+const beginWord = document.querySelector(".begin__word");
+const kicker = document.getElementById("kicker");
 const smoke = document.getElementById("smoke");
 const deck = document.getElementById("deck");
 const card = document.getElementById("card");
@@ -294,8 +299,118 @@ async function loadSettings() {
   }
 }
 
+/* appearance — colors + fonts from docs/appearance.md */
+function setVar(name, val) { document.documentElement.style.setProperty(name, val); }
+function hexShade(hex, amt) { // amt -1..1 (negative = darker); returns null if not hex
+  const m = String(hex).trim().match(/^#?([0-9a-fA-F]{6})$/);
+  if (!m) return null;
+  const f = (c) => Math.max(0, Math.min(255, amt >= 0 ? Math.round(c + (255 - c) * amt) : Math.round(c * (1 + amt))));
+  const n = parseInt(m[1], 16);
+  return "#" + [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => f(c).toString(16).padStart(2, "0")).join("");
+}
+function applyColor(role, v) {
+  if (role === "background") { setVar("--bg-0", v); setVar("--bg-1", hexShade(v, -0.08) || v); setVar("--bg-2", hexShade(v, -0.18) || v); }
+  else if (role === "text") { setVar("--ink", v); setVar("--ink-soft", hexShade(v, 0.28) || v); setVar("--ink-faint", hexShade(v, 0.45) || v); }
+  else if (role === "accent") { setVar("--gold", v); setVar("--gold-bright", hexShade(v, 0.18) || v); }
+  else if (role === "card") { setVar("--card-0", v); setVar("--card-1", hexShade(v, 0.16) || v); setVar("--card-2", hexShade(v, -0.4) || v); }
+}
+function applyFont(role, family) {
+  const fam = family.trim();
+  if (!fam) return;
+  const id = "dynfont-" + role;
+  const href = "https://fonts.googleapis.com/css2?family=" +
+    encodeURIComponent(fam).replace(/%20/g, "+") + ":ital,wght@0,400;0,700;1,400&display=swap";
+  let link = document.getElementById(id);
+  if (!link) { link = document.createElement("link"); link.rel = "stylesheet"; link.id = id; document.head.appendChild(link); }
+  link.href = href;
+  if (role === "display") { setVar("--display", "'" + fam + "', Georgia, serif"); setVar("--display-sc", "'" + fam + "', serif"); }
+  else { setVar("--body", "'" + fam + "', system-ui, sans-serif"); }
+}
+async function loadAppearance() {
+  try {
+    const res = await fetch("docs/appearance.md", { cache: "no-store" });
+    if (!res.ok) return;
+    (await res.text()).split(/\r?\n/).forEach((line) => {
+      const t = line.trim();
+      if (!t || t.startsWith("#")) return;
+      const i = t.indexOf(":"); if (i < 0) return;
+      const key = t.slice(0, i).trim().toLowerCase();
+      const val = t.slice(i + 1).trim(); if (!val) return;
+      if (key === "background") applyColor("background", val);
+      else if (key === "text" || key === "text color") applyColor("text", val);
+      else if (key === "accent" || key === "gold") applyColor("accent", val);
+      else if (key === "card" || key === "card color") applyColor("card", val);
+      else if (key === "display font") applyFont("display", val);
+      else if (key === "body font") applyFont("body", val);
+    });
+  } catch (e) { /* keep defaults */ }
+}
+
+/* words — on-screen copy + omens from docs/words.md */
+async function loadWords() {
+  try {
+    const res = await fetch("docs/words.md", { cache: "no-store" });
+    if (!res.ok) return;
+    const omens = [];
+    (await res.text()).split(/\r?\n/).forEach((line) => {
+      const t = line.trim();
+      if (!t || t.startsWith("#")) return;
+      if (t.startsWith("-")) { const v = t.slice(1).trim(); if (v) omens.push(v); return; }
+      const i = t.indexOf(":"); if (i < 0) return;
+      const key = t.slice(0, i).trim().toLowerCase();
+      const val = t.slice(i + 1).trim(); if (!val) return;
+      if (key === "start button" && beginWord) beginWord.textContent = val;
+      else if (key === "title" && kicker) kicker.textContent = val;
+      else if (key === "draw-again button" && againBtn) againBtn.textContent = val;
+      else if (key === "tell label") setVar("--tell-label", '"' + val + '"');
+      else if (key === "upright label") LABELS.upright = val;
+      else if (key === "reversed label") LABELS.reversed = val;
+    });
+    if (omens.length) OMENS = omens;
+  } catch (e) { /* keep defaults */ }
+}
+
+/* cards — titles, images, and text from docs/cards.md (overrides defaults) */
+function applyCards(text) {
+  text.split(/^\s*===/m).forEach((block) => {
+    const lines = block.split(/\r?\n/);
+    const header = (lines.shift() || "").replace(/=+\s*$/, "").trim();
+    if (!header) return;
+    const dot = header.indexOf("·");
+    const num = (dot >= 0 ? header.slice(0, dot) : header).trim();
+    const name = dot >= 0 ? header.slice(dot + 1).trim() : "";
+    const card = CARDS.find((c) => c.n === num);
+    if (!card) return;
+    if (name) card.name = name;
+    lines.forEach((line) => {
+      const t = line.trim();
+      if (!t || t.startsWith("#")) return;
+      const i = t.indexOf(":"); if (i < 0) return;
+      const key = t.slice(0, i).trim().toLowerCase();
+      const val = t.slice(i + 1).trim(); if (!val) return;
+      if (key === "traditional name") card.trad = val;
+      else if (key === "image") card.img = val;
+      else if (key === "keywords") card.keywords = val;
+      else if (key === "upright") card.upright = val;
+      else if (key === "reversed") card.reversed = val;
+      else if (key === "question" || key === "inquiry") card.inquiry = val;
+      else if (key === "tell") card.tell = val;
+    });
+  });
+}
+async function loadCards() {
+  try {
+    const res = await fetch("docs/cards.md", { cache: "no-store" });
+    if (!res.ok) return;
+    applyCards(await res.text());
+  } catch (e) { /* keep built-in card text */ }
+}
+
 renderContact(SETTINGS_FALLBACK);
 loadSettings();
+loadAppearance();
+loadWords();
+loadCards();
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -342,14 +457,19 @@ function dressCard(c, reversed) {
   cardNumeral.textContent = c.n;
   cardName.textContent = c.name;
   cardTrad.textContent = c.trad;
-  cardOrientation.textContent = reversed ? "Reversed" : "Upright";
+  cardOrientation.textContent = reversed ? LABELS.reversed : LABELS.upright;
 
-  // try the art; reveal it only if it actually loads
+  // try the art; reveal it only if it actually loads.
+  // c.img (from docs/cards.md) wins; otherwise use the automatic path.
+  const explicit = c.img && c.img.trim();
+  const src = explicit
+    ? (/(^https?:\/\/)|\//i.test(explicit) ? explicit : IMAGE_BASE + explicit)
+    : IMAGE_BASE + c.slug + IMAGE_EXT;
   cardImg.classList.remove("is-loaded");
   cardImg.alt = c.name + " — " + c.trad;
   cardImg.onload = () => cardImg.classList.add("is-loaded");
   cardImg.onerror = () => cardImg.classList.remove("is-loaded");
-  cardImg.src = IMAGE_BASE + c.slug + IMAGE_EXT;
+  cardImg.src = src;
 
   card.classList.toggle("card--reversed", reversed);
 

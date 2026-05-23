@@ -10,6 +10,9 @@ const SHELL = [
   "styles.css",
   "script.js",
   "docs/settings.md",
+  "docs/appearance.md",
+  "docs/words.md",
+  "docs/cards.md",
   "manifest.webmanifest",
   "icon.svg",
   "icons/icon-192.png",
@@ -40,9 +43,9 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(req.url);
   const isNav = req.mode === "navigate";
-  const isConfig = url.pathname.endsWith("settings.md");
+  const isConfig = url.pathname.includes("/docs/") && url.pathname.endsWith(".md");
 
-  // Navigations + settings.md: fresh first, fall back to cache offline.
+  // Navigations + the editable docs files: fresh first, fall back to cache offline.
   if (isNav || isConfig) {
     event.respondWith(
       fetch(req)
