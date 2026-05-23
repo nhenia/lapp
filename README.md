@@ -26,6 +26,7 @@ Designed for phones and desktops, and it honors `prefers-reduced-motion`.
 | `styles.css` | All styling and animation (parchment ground, dark cards, smoke, flip) |
 | `script.js` | The 22 cards' text, the draw choreography, and the editable settings |
 | `contact_info.md` | Plain-text contact details shown at the end of the reading — **edit this, no code** |
+| `feedback.md` | A plain-language tour of the whole site for Jen to mark up with change requests |
 | `.github/workflows/deploy.yml` | Auto-deploys to GitHub Pages on push to `main` |
 | `.nojekyll` | Tells Pages to serve the files as-is |
 | `manifest.webmanifest` | PWA metadata (name, colors, icons) so it can be installed |
@@ -97,6 +98,20 @@ Set in `index.html` (the Google Fonts `<link>`) and `styles.css` (the `--display
 ### Card text
 
 Each card is an object in the `CARDS` array in `script.js` (`name`, `trad`, `keywords`, `upright`, `reversed`, `inquiry`, `tell`). Edit there to tweak wording.
+
+---
+
+## Asking for changes (the no-code feedback loop)
+
+`feedback.md` is written for someone who doesn't use GitHub, a terminal, or code. It's a plain-language walkthrough of every part of the site, with a **"Your note:"** line under each item to mark up.
+
+The loop:
+
+1. Jen writes her thoughts on the **"Your note:"** lines in `feedback.md` (vague is fine — "make this slower," "I hate this color").
+2. You hand that marked-up file to Claude.
+3. Claude treats each note as an instruction, makes the changes, and clears the notes back to blank for next time.
+
+She never has to touch code — describing the change is enough.
 
 ---
 
