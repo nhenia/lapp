@@ -1,6 +1,6 @@
 /* The Lagniappe Arcana — service worker.
    Bump CACHE when you change cached files to force an update. */
-const CACHE = "lagniappe-v1";
+const CACHE = "lagniappe-v2";
 
 // App shell, cached on install. Relative paths resolve against the SW scope,
 // so this works on a custom domain or a project subpath alike.
@@ -9,7 +9,7 @@ const SHELL = [
   "index.html",
   "styles.css",
   "script.js",
-  "contact_info.md",
+  "docs/settings.md",
   "manifest.webmanifest",
   "icon.svg",
   "icons/icon-192.png",
@@ -40,10 +40,10 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(req.url);
   const isNav = req.mode === "navigate";
-  const isContact = url.pathname.endsWith("contact_info.md");
+  const isConfig = url.pathname.endsWith("settings.md");
 
-  // Navigations + contact_info.md: fresh first, fall back to cache offline.
-  if (isNav || isContact) {
+  // Navigations + settings.md: fresh first, fall back to cache offline.
+  if (isNav || isConfig) {
     event.respondWith(
       fetch(req)
         .then((res) => {

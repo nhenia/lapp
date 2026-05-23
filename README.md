@@ -24,41 +24,42 @@ Designed for phones and desktops, and it honors `prefers-reduced-motion`.
 | --- | --- |
 | `index.html` | Markup + the fleur-de-lis ornament and Google Fonts link |
 | `styles.css` | All styling and animation (parchment ground, dark cards, smoke, flip) |
-| `script.js` | The 22 cards' text, the draw choreography, and the editable settings |
-| `contact_info.md` | Plain-text contact details shown at the end of the reading — **edit this, no code** |
-| `feedback.md` | A plain-language tour of the whole site for Jen to mark up with change requests |
+| `script.js` | The 22 cards' text and the draw choreography |
+| `docs/settings.md` | Contact info + options (reversed frequency, card-image folder/type) — **edit this, no code** |
+| `docs/feedback.md` | A plain-language tour of the whole site for Jen to mark up with change requests |
 | `.github/workflows/deploy.yml` | Auto-deploys to GitHub Pages on push to `main` |
 | `.nojekyll` | Tells Pages to serve the files as-is |
 | `manifest.webmanifest` | PWA metadata (name, colors, icons) so it can be installed |
 | `service-worker.js` | Caches the site for offline use |
 | `icon.svg` + `icons/` | App icons (scalable + PNG, including maskable + Apple) |
 | `actualtext` | The full source guidebook the card text was drawn from |
-| `first_prompt.md` | The original brief that kicked this off |
+| `docs/first_prompt.md` | The original brief that kicked this off, plus prompt-writing tips |
 
 ---
 
 ## Customizing
 
-A few knobs live at the top of **`script.js`**:
+### Settings (one file, no code)
 
-```js
-const IMAGE_BASE = "cards/";      // folder the card art lives in
-const IMAGE_EXT  = ".jpg";        // card art file extension
-const REVERSAL_CHANCE = 0.32;     // odds a card lands reversed (0 = never)
-```
-
-### Contact details
-
-Edit **`contact_info.md`** — no code required. It's plain text, one item per line:
+Everything adjustable lives in **`docs/settings.md`** — plain text, `Key: value`, one per line. The site reads it fresh on each load.
 
 ```
+## CONTACT
 Lead: cards & words by
 Instagram: _nh_en
+TikTok:
 Email:
 Website:
+
+## OPTIONS
+Reversed chance: 1 in 3
+Card image folder: cards/
+Card image type: .jpg
 ```
 
-Fill in any of **Instagram, TikTok, Twitter/X, GitHub, Email,** or **Website** (the `@` is optional; a blank value is hidden). The first filled item is shown large, any others appear smaller beneath it, and `Lead` is the little line above. The site reads this file fresh each time it loads.
+- **Contact** — fill in any of **Instagram, TikTok, Twitter/X, GitHub, Email,** or **Website** (the `@` is optional; a blank value is hidden). The first filled item shows large, any others smaller beneath it; `Lead` is the little label above.
+- **Reversed chance** — how often a card lands reversed. Accepts `1 in 3`, `33%`, `0.32`, or `never`.
+- **Card image folder / type** — where the art lives and its extension (see below).
 
 ### Adding the card art
 
@@ -103,11 +104,11 @@ Each card is an object in the `CARDS` array in `script.js` (`name`, `trad`, `key
 
 ## Asking for changes (the no-code feedback loop)
 
-`feedback.md` is written for someone who doesn't use GitHub, a terminal, or code. It's a plain-language walkthrough of every part of the site, with a **"Your note:"** line under each item to mark up.
+`docs/feedback.md` is written for someone who doesn't use GitHub, a terminal, or code. It's a plain-language walkthrough of every part of the site, with a **"Your note:"** line under each item to mark up.
 
 The loop:
 
-1. Jen writes her thoughts on the **"Your note:"** lines in `feedback.md` (vague is fine — "make this slower," "I hate this color").
+1. Jen writes her thoughts on the **"Your note:"** lines in `docs/feedback.md` (vague is fine — "make this slower," "I hate this color").
 2. You hand that marked-up file to Claude.
 3. Claude treats each note as an instruction, makes the changes, and clears the notes back to blank for next time.
 
@@ -130,13 +131,13 @@ python3 -m http.server 8000
 # then open http://localhost:8000
 ```
 
-(Use a server like this — not opening the file directly — so the service worker and `contact_info.md` load.)
+(Use a server like this — not opening the file directly — so the service worker and `docs/settings.md` load.)
 
 ## Install it (it's a PWA)
 
 The site is a Progressive Web App: once it's live over HTTPS, phones and desktops will offer to **install** / **Add to Home Screen**, and it runs **offline** after the first visit (the cards' text is bundled in).
 
-If you change the site and an update doesn't show, bump the `CACHE` name at the top of `service-worker.js` (e.g. `lagniappe-v1` → `lagniappe-v2`) so visitors pull the new files. Edits to `contact_info.md` and the page itself refresh on their own while online.
+If you change the site and an update doesn't show, bump the `CACHE` name at the top of `service-worker.js` (e.g. `lagniappe-v2` → `lagniappe-v3`) so visitors pull the new files. Edits to `docs/settings.md` and the page itself refresh on their own while online.
 
 ---
 

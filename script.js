@@ -1,21 +1,21 @@
 /* ===================================================================
    The Lagniappe Arcana — single-card reading
    ===================================================================
-   EDIT ME:
-   - Contact details: edit  contact_info.md  (no code needed). The site
-     reads that file on load and shows whatever you put there.
-   - IMAGE_BASE / card.slug: drop art into  cards/<slug>.jpg  and it shows
-     automatically. Until then a styled placeholder face is used.
+   EDIT ME — no code:
+   - All settings (contact info, reversed frequency, card-image folder/type)
+     live in  docs/settings.md . The site reads that file when it loads.
+   - Card art: drop images into  cards/<slug>.jpg  (slugs below). Until then
+     a styled placeholder face is shown.
 =================================================================== */
 
-// Only used if contact_info.md can't be loaded.
-const CONTACT_FALLBACK = {
+// Defaults — overridden at load by docs/settings.md (see loadSettings).
+let IMAGE_BASE = "cards/";
+let IMAGE_EXT = ".jpg";
+let REVERSAL_CHANCE = 0.32;
+const SETTINGS_FALLBACK = {
   lead: "cards & words by",
   links: [{ type: "instagram", value: "_nh_en" }],
 };
-const IMAGE_BASE = "cards/";              // folder holding the card art
-const IMAGE_EXT = ".jpg";                 // extension of the card art
-const REVERSAL_CHANCE = 0.32;             // odds a card lands reversed
 
 const CARDS = [
   { n: "0", slug: "the-reveler", name: "The Reveler", trad: "The Fool",
@@ -210,7 +210,9 @@ let busy = false;
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const T = (full, lite) => (reduce ? lite : full);
 
-/* contact — populated from contact_info.md, with a safe fallback */
+/* settings — contact + options from docs/settings.md, with safe fallbacks */
+const CONTACT_TYPES = ["instagram", "tiktok", "twitter", "x", "github", "email", "website", "url", "site"];
+
 function buildContactLink(type, value) {
   const strip = (v) => v.replace(/^@/, "");
   const t = type.toLowerCase();
@@ -224,9 +226,10 @@ function buildContactLink(type, value) {
   return { href: url, label };
 }
 
-function parseContactInfo(text) {
+function parseSettings(text) {
   let lead = "";
   const links = [];
+  const options = {};
   text.split(/\r?\n/).forEach((line) => {
     const t = line.trim();
     if (!t || t.startsWith("#")) return;
@@ -236,9 +239,32 @@ function parseContactInfo(text) {
     const val = t.slice(i + 1).trim();
     if (!val) return;
     if (key === "lead") { lead = val; return; }
-    links.push({ type: key, value: val });
+    if (key === "reversed chance") { options.reversed = val; return; }
+    if (key === "card image folder") { options.imageBase = val; return; }
+    if (key === "card image type") { options.imageExt = val; return; }
+    if (CONTACT_TYPES.includes(key)) links.push({ type: key, value: val });
   });
-  return { lead, links };
+  return { lead, links, options };
+}
+
+function parseReversedChance(raw) {
+  const s = String(raw).trim().toLowerCase();
+  if (s === "never") return 0;
+  let m;
+  if ((m = s.match(/^1\s*in\s*(\d+(?:\.\d+)?)$/))) { const n = parseFloat(m[1]); return n > 0 ? 1 / n : 0; }
+  if ((m = s.match(/^(\d+(?:\.\d+)?)\s*%$/))) return Math.min(1, parseFloat(m[1]) / 100);
+  const n = parseFloat(s);
+  if (!isNaN(n)) return Math.max(0, Math.min(1, n > 1 ? n / 100 : n));
+  return null; // unrecognized — keep the current value
+}
+
+function applyOptions(opt) {
+  if (opt.reversed != null) {
+    const v = parseReversedChance(opt.reversed);
+    if (v != null) REVERSAL_CHANCE = v;
+  }
+  if (opt.imageBase) IMAGE_BASE = /\/$/.test(opt.imageBase) ? opt.imageBase : opt.imageBase + "/";
+  if (opt.imageExt) IMAGE_EXT = opt.imageExt.startsWith(".") ? opt.imageExt : "." + opt.imageExt;
 }
 
 function renderContact(cfg) {
@@ -256,19 +282,20 @@ function renderContact(cfg) {
   });
 }
 
-async function loadContact() {
+async function loadSettings() {
   try {
-    const res = await fetch("contact_info.md", { cache: "no-store" });
+    const res = await fetch("docs/settings.md", { cache: "no-store" });
     if (!res.ok) return;
-    const cfg = parseContactInfo(await res.text());
+    const cfg = parseSettings(await res.text());
+    applyOptions(cfg.options);
     if (cfg.lead || cfg.links.length) renderContact(cfg);
   } catch (e) {
-    /* keep the fallback already on screen */
+    /* keep the fallbacks already in effect */
   }
 }
 
-renderContact(CONTACT_FALLBACK);
-loadContact();
+renderContact(SETTINGS_FALLBACK);
+loadSettings();
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
