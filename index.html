@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>The Lagniappe Arcana</title>
+<meta name="description" content="A single-card reading from the Lagniappe Arcana — a 22-card Major Arcana deck shaped by the rituals and histories of New Orleans." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Almendra:ital,wght@0,400;0,700;1,400;1,700&family=Almendra+SC&family=Inter:wght@300;400;500;600&display=swap"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <main class="stage" id="stage">
+
+    <!-- 1. The lone invitation -->
+    <button class="begin" id="begin" type="button" aria-label="Begin the reading">
+      <span class="begin__word">BEGIN</span>
+      <span class="begin__halo" aria-hidden="true"></span>
+    </button>
+
+    <!-- 2. Smoke -->
+    <div class="smoke" id="smoke" aria-hidden="true"></div>
+
+    <!-- 3. The reading -->
+    <section class="reading" id="reading" aria-live="polite">
+      <p class="kicker" id="kicker">The Lagniappe Arcana</p>
+      <p class="omen" id="omen"></p>
+
+      <div class="card-area" id="cardArea">
+        <div class="deck" id="deck" aria-hidden="true"></div>
+
+        <div class="card" id="card">
+          <div class="card__inner" id="cardInner">
+            <div class="card__face card__back">
+              <div class="card__back-frame">
+                <svg class="ornament ornament--small" viewBox="0 0 64 100" aria-hidden="true">
+                  <use href="#fleur" />
+                </svg>
+              </div>
+            </div>
+            <div class="card__face card__front">
+              <div class="card__content" id="cardContent">
+                <img class="card__img" id="cardImg" alt="" />
+                <div class="card__placeholder" id="cardPlaceholder">
+                  <span class="card__numeral" id="cardNumeral"></span>
+                  <svg class="ornament" viewBox="0 0 64 100" aria-hidden="true">
+                    <use href="#fleur" />
+                  </svg>
+                  <h2 class="card__name" id="cardName"></h2>
+                  <p class="card__trad" id="cardTrad"></p>
+                </div>
+              </div>
+              <span class="card__orientation" id="cardOrientation"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="meaning" id="meaning">
+        <p class="meaning__keywords" id="meaningKeywords"></p>
+        <p class="meaning__body" id="meaningBody"></p>
+        <blockquote class="meaning__inquiry" id="meaningInquiry"></blockquote>
+        <p class="meaning__tell" id="meaningTell"></p>
+      </div>
+
+      <footer class="contact" id="contact">
+        <p class="contact__lead">cards &amp; words by</p>
+        <a class="contact__handle" id="contactHandle" href="#" target="_blank" rel="noopener noreferrer"></a>
+        <button class="again" id="again" type="button">draw another</button>
+      </footer>
+    </section>
+  </main>
+
+  <!-- Shared ornament: a fleur-de-lis -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="fleur" viewBox="0 0 64 100">
+        <path fill="currentColor" d="M32 2c-3.2 6.8-2.6 12.7.8 18.6 2 3.5 2.6 6.8 1.8 10.2-1.4-2-3.2-3.4-5.6-3.9 1.1-5.2-.6-9.9-4.6-13.9 1.1 4.6.2 8-2.4 11.2-2.9 3.6-4.2 7.4-3.3 12.1.6 3.2 2.5 5.7 5.6 7.4-3.3.4-6 1.9-7.9 4.9-2.9-4.2-7-6.4-12.4-6.2 3.4 2.9 5 6.2 4.9 10.2 4.6-1.3 8.4-.2 11.6 2.9-2.3 1.1-3.9 2.9-4.7 5.4-1 3.2-.3 6.1 1.7 8.7-2.3-.6-4.5-.3-6.6 1 2.4 1.2 3.8 3.1 4.3 5.7.9-1.3 2.1-2.1 3.7-2.4-1.3 4.6-.7 8.9 2 12.9 1.2-2.6 2.9-4.3 5.3-5.2-1.6 5 .2 11.6 4.5 16.4 4.3-4.8 6.1-11.4 4.5-16.4 2.4.9 4.1 2.6 5.3 5.2 2.7-4 3.3-8.3 2-12.9 1.6.3 2.8 1.1 3.7 2.4.5-2.6 1.9-4.5 4.3-5.7-2.1-1.3-4.3-1.6-6.6-1 2-2.6 2.7-5.5 1.7-8.7-.8-2.5-2.4-4.3-4.7-5.4 3.2-3.1 7-4.2 11.6-2.9-.1-4 1.5-7.3 4.9-10.2-5.4-.2-9.5 2-12.4 6.2-1.9-3-4.6-4.5-7.9-4.9 3.1-1.7 5-4.2 5.6-7.4.9-4.7-.4-8.5-3.3-12.1-2.6-3.2-3.5-6.6-2.4-11.2-4 4-5.7 8.7-4.6 13.9-2.4.5-4.2 1.9-5.6 3.9-.8-3.4-.2-6.7 1.8-10.2C34.6 14.7 35.2 8.8 32 2z"/>
+        <rect x="14" y="64" width="36" height="4" rx="2" fill="currentColor"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <script src="script.js"></script>
+</body>
+</html>
