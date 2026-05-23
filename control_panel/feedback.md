@@ -27,7 +27,7 @@ If an edit ever looks wrong, the site quietly falls back to the original — so 
 
 When someone opens the site, the screen is nearly empty and calm — a soft, warm, parchment-colored background, and a single word in the middle: **BEGIN**. Nothing else. The word gently fades in and out, like it's breathing. When you move the mouse over it (or it's tapped on a phone), it spreads out a little and glows. It's meant to feel quiet and a little ominous, like a held breath before something happens.
 
-> Your note: (Setup test — no site change needed.) If you can read this note in the workflow run, the automation works. Please just clear this note and make no other change.
+> Your note:
 
 ## 2. Clicking BEGIN — the smoke and the deck
 
