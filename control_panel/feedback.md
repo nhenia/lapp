@@ -66,7 +66,7 @@ After the meaning, your contact line appears: a small label and then your handle
 
 The contact line is easy to change anytime — see section 10.
 
-> Your note: please change the "draw another" button so it reads "draw again" instead.
+> Your note: *(e.g. "the little label above my name should say something else," or "remove the draw-another button")*
 
 ## 7. The overall look — colors
 
