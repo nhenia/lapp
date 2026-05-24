@@ -1,4 +1,5 @@
-# Colors and fonts. Edit a value and save. Blank = keep the default.
+# Colors and fonts. The values below are what the site uses RIGHT NOW.
+# Change a value and save to change the site; a blank line keeps the default.
 #
 #   - A color can be a plain name (like  ivory ,  maroon ) or a hex code
 #     (like  #f3ead8 ). Hex codes give you exact control.

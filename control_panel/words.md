@@ -1,5 +1,6 @@
-# The words shown on screen (not on the cards themselves). Edit and save.
-# Blank = keep the default.
+# The words shown on screen (not on the cards themselves). The values below
+# are what the site shows RIGHT NOW. Change one and save; a blank line keeps
+# the default.
 
 # The lone word people click to start the reading.
 Start button: BEGIN

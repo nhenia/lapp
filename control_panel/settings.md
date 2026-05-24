@@ -1,10 +1,11 @@
 # The Lagniappe Arcana — settings
 #
-# Edit the value after each colon, then save. This one file controls your
-# contact info and a few options for the site — no code needed.
+# Everything below is set to exactly what the site uses RIGHT NOW. To change
+# something, edit the value after its colon and save — no code needed. This
+# one file controls your contact info and a couple of options.
 #
 #   - Lines starting with #  are notes and are ignored.
-#   - Leave a value blank to use the default / hide that line.
+#   - A blank value falls back to the built-in default / hides that line.
 
 
 ## CONTACT  — shown at the end of every reading

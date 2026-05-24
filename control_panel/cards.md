@@ -1,4 +1,5 @@
-# The cards — their titles, images, and text. Edit any line, then save.
+# The cards — their titles, images, and text. Every line below is each card's
+# CURRENT wording. Change any line and save; a blank line keeps the original.
 #
 #   - Each card is a block that starts with a  ===  header line. Keep those.
 #   - The number after === (0, I, II, ...) is how the card is matched —
