@@ -24,7 +24,7 @@ Card: neon pink
 ## FONTS
 
 # The fancy font — headers, the question, your name.
-Display font: Almendra
+Display font: Jacquard 12
 
 # The plain, easy-to-read font for the body text.
 Body font: Inter
