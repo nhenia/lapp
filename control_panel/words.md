@@ -3,10 +3,10 @@
 # the default.
 
 # The lone word people click to start the reading.
-Start button: BEGIN
+Start button: begin
 
 # The small title shown above the card.
-Title: The Lagniappe Arcana
+Title: Lagniappe
 
 # The button to pull a new card.
 Draw-again button: draw another
@@ -15,8 +15,8 @@ Draw-again button: draw another
 Tell label: the tell
 
 # What the card says when it lands right-side up / upside-down.
-Upright label: Upright
-Reversed label: Reversed
+Upright label: upright
+Reversed label: reversed
 
 
 ## OMENS
@@ -24,5 +24,49 @@ Reversed label: Reversed
 # each starting with a dash. A random one is chosen for each reading.
 
 - ,,+()+
+      └──────┬─────────────┬──────┘
+                     │ ▒▒▒   🜔   ▒▒▒ │
+                     └──────┬──────┘
+                            🜛
+                         ⚙  ⚙  ⚙
 - &&+
+▲                [ ⏃ ]              ▲
+       ░░░░░            ┌───┴───┐          ░░░░░
+      ░░🜁░░            │  ⌱ ⌱  │         ░░🜄░░
+     ░░░░░░░     ┌──────┴───────┴──────┐   ░░░░░░░
+    ░░░🜂░░░░     │   𝕿𝖟𝖆𝖗_𝖁𝖔𝖝_𝕸𝖆𝖑   │   ░░░🜃░░░░
+   ░░░░░░░░░     └──────┬───────┬──────┘   ░░░░░░░░░
+                         │ ░░░░░ │
+                         └───┬───┘
+                             ⏛
 - ,,§ ,,
+     ⌁ ⌁ ⌁
+-
+                            🜏
+                        ┌───┴───┐
+                        │ ░░░░░ │
+                 ┌──────┴───────┴──────┐
+                 │  ⚖  𝔗𝔥𝔢 𝔙𝔬𝔦𝔡  ⚖  │
+                 └──────┬───────┬──────┘
+                        │ ░░░░░ │
+                        └───┬───┘
+                            ☤
+                           ⌁ ⌁ ⌁
+-       ☾
+   ┌──┴──┐
+   │ ⎓ ⎓ │
+┌──┴─────┴──┐
+│ 𝔗𝔥𝔢 𝔗𝔦𝔡𝔢 │
+└──┬─────┬──┘
+   │ ▒▒▒ │
+   └──┬──┘
+      🜄
+-  ⍢
+   ┌──┴──┐
+   │ ⎄ ⎄ │
+┌──┴─────┴──┐
+│ 𝔗𝔥𝔢 𝔐𝔞𝔰𝔨 │
+└──┬─────┬──┘
+   │ ▒▒▒ │
+   └──┬──┘
+      ⍤
