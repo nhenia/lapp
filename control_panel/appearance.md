@@ -9,18 +9,15 @@
 ## COLORS
 
 # The soft page background.
-Background: ##168B8D
+Background: #E86CA6
 
 # The main text color.
-Text: #F0F53B
-
+Text: 
+#324918
 # The accent used for edges, dividers, and details (currently gold).
-Accent: 
-
-#E3FAC6
-
+Accent: #F83F78
 # The card color (the dark face the art and reveal sit on).
-Card: #75484B
+Card: #B3CC33
 
 ## FONTS
 
