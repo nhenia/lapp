@@ -15,11 +15,12 @@ Background: ##168B8D
 Text: #F0F53B
 
 # The accent used for edges, dividers, and details (currently gold).
-Accent: neon pink
+Accent: 
+
+#E3FAC6
 
 # The card color (the dark face the art and reveal sit on).
-Card: neon pink
-
+Card: #75484B
 
 ## FONTS
 
