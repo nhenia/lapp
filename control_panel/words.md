@@ -23,8 +23,6 @@ Reversed label: Reversed
 # The line that appears while the cards rise from the smoke. One per line,
 # each starting with a dash. A random one is chosen for each reading.
 
-- The smoke gathers. The deck already knows why you came.
-- Shuffle the air. One card has been waiting for you.
-- Hold the question in your chest. Let the cards find it.
-- The crossroads opens. Something rises to meet you.
-- Breathe in the haze. The arcana is listening.
+- ,,+()+
+- &&+
+- ,,§ ,,
