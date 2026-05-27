@@ -69,6 +69,9 @@ jobs:
         if: ${{ steps.scan.outputs.has_notes == 'true' && env.HAS_KEY == 'true' }}
         uses: anthropics/claude-code-action@v1
         with:
+          # Use the workflow's built-in token for GitHub ops, so the Claude
+          # GitHub App does NOT need to be installed on the repo.
+          github_token: ${{ github.token }}
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: "--max-turns 40"
           prompt: |

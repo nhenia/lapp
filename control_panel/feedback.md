@@ -39,7 +39,7 @@ When someone clicks or taps BEGIN, the word dissolves away and a wisp of **smoke
 
 One card lifts from the deck and **flips over** in the air to reveal its face. Right now, until your artwork is added, the face is a dark card with a gold fleur-de-lis, the card's number, its name, and its old/traditional tarot name. Once your photos are added, the photo fills the card instead.
 
-> Your note:
+> Your note: I want the single card to materialize, no deck, no suggestion that there's more than a single card.
 
 ## 4. Upright or reversed
 
@@ -115,7 +115,7 @@ The site can be **added to a phone's home screen like an app** — its own gold 
 
 ## The 22 cards (for pointing at specific ones)
 
-0 — The Reveler · I — The Corner · II — The Cemeteries · III — Pontalba & Gumbo · IV — The Natchez Steamboat · V — Jazz · VI — Chicory & Beignets · VII — The Float · VIII — The Bartender · IX — The Porch · X — The St. Charles Streetcar · XI — The Rougarou · XII — Red Beans Monday · XIII — Ash Wednesday · XIV — The Roux · XV — Bourbon & The Grid · XVI — The Waterline · XVII — Bounce · XVIII — Bayou Night · XIX — The Crawfish Boil · XX — Second Line · XXI — Mardi Gras Indians
+0 — The Reveler · I — The Corner · II — The Cemeteries · III — Pontalba & Gumbo · IV — The Natchez Steamboat · V — Jazz · VI — Chicory & Beignets · VII — The Float · VIII — The Bartender · IX — The Porch · X — The St. Charles Streetcar · XI — The Rougarou · XII — Red Beans & Rice Monday · XIII — Ash Wednesday · XIV — The Roux · XV — Bourbon & The Grid · XVI — Plaza Tower · XVII — Bounce Music · XVIII — Bayou Fog · XIX — The Crawfish Boil · XX — Second Line · XXI — Mardi Gras Indians
 
 ---
 
@@ -124,7 +124,10 @@ The site can be **added to a phone's home screen like an app** — its own gold 
 Big ideas, small nitpicks, "wouldn't it be cool if…", things that feel off but you can't name why — all of it goes here. Don't hold back.
 
 > Your notes:
-
-
+Thank you for simplifying and being gentle with me.
+it means heaps.
+I'm excited to have this this idiot proof thinger you created specifically for me, so I can stop wasting time. 
+thank you for anticipating my needs.
+I love you!
 
 

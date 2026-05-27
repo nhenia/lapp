@@ -3,10 +3,10 @@
 # the default.
 
 # The lone word people click to start the reading.
-Start button: BEGIN
+Start button: begin
 
 # The small title shown above the card.
-Title: The Lagniappe Arcana
+Title: Lagniappe
 
 # The button to pull a new card.
 Draw-again button: draw another
@@ -15,16 +15,58 @@ Draw-again button: draw another
 Tell label: the tell
 
 # What the card says when it lands right-side up / upside-down.
-Upright label: Upright
-Reversed label: Reversed
+Upright label: upright
+Reversed label: reversed
 
 
 ## OMENS
 # The line that appears while the cards rise from the smoke. One per line,
 # each starting with a dash. A random one is chosen for each reading.
 
-- The smoke gathers. The deck already knows why you came.
-- Shuffle the air. One card has been waiting for you.
-- Hold the question in your chest. Let the cards find it.
-- The crossroads opens. Something rises to meet you.
-- Breathe in the haze. The arcana is listening.
+- ,,+()+
+      └──────┬─────────────┬──────┘
+                     │ ▒▒▒   🜔   ▒▒▒ │
+                     └──────┬──────┘
+                            🜛
+                         ⚙  ⚙  ⚙
+- &&+
+▲                [ ⏃ ]              ▲
+       ░░░░░            ┌───┴───┐          ░░░░░
+      ░░🜁░░            │  ⌱ ⌱  │         ░░🜄░░
+     ░░░░░░░     ┌──────┴───────┴──────┐   ░░░░░░░
+    ░░░🜂░░░░     │   𝕿𝖟𝖆𝖗_𝖁𝖔𝖝_𝕸𝖆𝖑   │   ░░░🜃░░░░
+   ░░░░░░░░░     └──────┬───────┬──────┘   ░░░░░░░░░
+                         │ ░░░░░ │
+                         └───┬───┘
+                             ⏛
+- ,,§ ,,
+     ⌁ ⌁ ⌁
+-
+                            🜏
+                        ┌───┴───┐
+                        │ ░░░░░ │
+                 ┌──────┴───────┴──────┐
+                 │  ⚖  𝔗𝔥𝔢 𝔙𝔬𝔦𝔡  ⚖  │
+                 └──────┬───────┬──────┘
+                        │ ░░░░░ │
+                        └───┬───┘
+                            ☤
+                           ⌁ ⌁ ⌁
+-       ☾
+   ┌──┴──┐
+   │ ⎓ ⎓ │
+┌──┴─────┴──┐
+│ 𝔗𝔥𝔢 𝔗𝔦𝔡𝔢 │
+└──┬─────┬──┘
+   │ ▒▒▒ │
+   └──┬──┘
+      🜄
+-  ⍢
+   ┌──┴──┐
+   │ ⎄ ⎄ │
+┌──┴─────┴──┐
+│ 𝔗𝔥𝔢 𝔐𝔞𝔰𝔨 │
+└──┬─────┬──┘
+   │ ▒▒▒ │
+   └──┬──┘
+      ⍤

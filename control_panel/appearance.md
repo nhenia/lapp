@@ -9,22 +9,20 @@
 ## COLORS
 
 # The soft page background.
-Background: #f3ead8
+Background: #E86CA6
 
 # The main text color.
-Text: #241a12
-
+Text: 
+#324918
 # The accent used for edges, dividers, and details (currently gold).
-Accent: #b8893b
-
+Accent: #F83F78
 # The card color (the dark face the art and reveal sit on).
-Card: #140f24
-
+Card: #B3CC33
 
 ## FONTS
 
 # The fancy font — headers, the question, your name.
-Display font: Almendra
+Display font: Jacquard 12
 
 # The plain, easy-to-read font for the body text.
 Body font: Inter
